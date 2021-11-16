@@ -5,7 +5,7 @@ The repo features my weekly usage and learning in rust including:
 - Some Trial algorithms with tests 
 
 ### Requirments
-- Rust tool chain 2018 
+- All version of rust edition 2018
  - For some,  the nightly tool chain may be needed
 ### Usage
 - Clone the repo using git (check my other repos for instructions on how to );
