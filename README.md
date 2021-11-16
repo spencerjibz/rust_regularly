@@ -8,8 +8,8 @@ The repo features my weekly usage and learning in rust including:
 - All versions of rust edition 2018
  - For some,  the nightly tool chain may be needed
 ### Usage
-- Clone the repo using git (check my other repos for instructions on how to );
-- Use using `cargo run or cargo build` to platform dependent binaries. Use the release flag (`Rust cargo run --release `) for optimized builds
+- Clone the repo using git (check my other repos for instructions on how to ).
+- change to any desired directory and use using `cargo run or cargo build` to  produce platform dependent binaries. Use the release flag (`cargo run --release `) for optimized builds.
 - Use  `cargo test `  to test examples with test suites.
 Note: Some of the sub-modules could have no-std code 
 
