@@ -9,8 +9,8 @@ The repo features my weekly usage and learning in rust including:
  - For some,  the nightly tool chain may be needed
 ### Usage
 - Clone the repo using git (check my other repos for instructions on how to );
-- Use using ```rust cargo run or cargo build ``` to platform dependent binaries. Use the release flag (```rust cargo run --release```)
-- Use  ```rust  cargo test  ```  to test examples with test suites.
+- Use using ```Rust cargo run or cargo build ``` to platform dependent binaries. Use the release flag (```Rust cargo run --release ```) for optimized builds
+- Use  ```Rust  cargo test  ```  to test examples with test suites.
 Note: Some of the sub-modules could have no-std code 
 
 
