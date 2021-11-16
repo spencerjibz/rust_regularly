@@ -5,12 +5,12 @@ The repo features my weekly usage and learning in rust including:
 - Some Trial algorithms with tests 
 
 ### Requirments
-- All version of rust edition 2018
+- All versions of rust edition 2018
  - For some,  the nightly tool chain may be needed
 ### Usage
 - Clone the repo using git (check my other repos for instructions on how to );
-- Use using ```Rust cargo run or cargo build ``` to platform dependent binaries. Use the release flag (```Rust cargo run --release ```) for optimized builds
-- Use  ```Rust  cargo test  ```  to test examples with test suites.
+- Use using `cargo run or cargo build` to platform dependent binaries. Use the release flag (`Rust cargo run --release `) for optimized builds
+- Use  `cargo test `  to test examples with test suites.
 Note: Some of the sub-modules could have no-std code 
 
 
