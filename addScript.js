@@ -1,6 +1,8 @@
  let {readdirSync,lstatSync,readFileSync} = require("fs");
  let {execSync,exec} = require('child_process');
 
+ let args = process.argv;
+ let cmd = args[2]
 
  // get a list of subdirectories  excluding .git
  let subDir = readdirSync(process.cwd())
@@ -18,7 +20,7 @@ subDir.forEach(dir=> {
     
  process.chdir('./'+dir);
 
-  exec(`rm -rf .git`,(err,stdout,stderr)=> { 
+  exec(cmd,(err,stdout,stderr)=> { 
 
 
  if (err||stderr) { 

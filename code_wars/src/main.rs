@@ -1,111 +1,127 @@
-use std::cmp::Ordering;
 use itertools::Itertools;
+use std::cmp::Ordering;
 
 fn main() {
     let now = std::time::Instant::now();
-    let square = create_3n(15);
-   println!("ans = {:?}",snail(&square));
-    println!("{:?}",sum_of_divided(vec![107, 158, 204, 100, 118, 123, 126, 110, 116, 100]));
-    println!("{:?}",convert_fracts(vec![(690, 1300), (87, 1310), (30, 40)]));
-      //println!("{:?}",);//disemvowel("This website is for losers LOL!"));
-     println!("{:?}",now.elapsed())
-
+    /*let square = create_3n(15);
+    println!("ans = {:?}", snail(&square));
+    println!(
+        "{:?}",
+        sum_of_divided(vec![107, 158, 204, 100, 118, 123, 126, 110, 116, 100])
+    );
+    println!(
+        "{:?}",
+        convert_fracts(vec![(690, 1300), (87, 1310), (30, 40)])
+    );
+    */
+    //println!("{:?}",);//disemvowel("This website is for losers LOL!"));
+    //println!("{}",decomp(22));
+    println!("{:?}",solve(vec![]));
+    println!("{:?}", now.elapsed())
 }
 
 #[allow(dead_code)]
-static  VOWEL:&str = "aeiou";
+static VOWEL: &str = "aeiou";
 
-#[allow(dead_code)]#[inline(always)]
+#[allow(dead_code)]
+#[inline(always)]
 fn disemvowel(s: &str) -> String {
-  let vowel = "aeiou";
-    s.chars().filter(|&e|!vowel.contains(e.to_ascii_lowercase())).join("")
+    let vowel = "aeiou";
+    s.chars()
+        .filter(|&e| !vowel.contains(e.to_ascii_lowercase()))
+        .join("")
 }
 #[allow(dead_code)]
 fn closest(s: &str) -> String {
     // your code
- let  strng:Vec<&str>= s.split_whitespace().collect();
- let  mut weights:Vec<(u32,u32)> = strng.iter().map(|e| {
-   let r = e.chars().map(|c|c.to_digit(10u32).unwrap()).reduce(|cur,nex|cur+nex).unwrap();
-  (r,e.parse::<u32>().unwrap())
- }
-).collect();
- 
-weights.sort();
-let   diffs:Vec<Option<(u32,u32,u32)>> = weights.iter().enumerate().map(|(ind,(n,e))|  { 
- let next = ind+1;
-  if next >= weights.len()  { 
-      return  None
-  }
-  else {
-  Some( ((weights[next].0 - n),*n,*e))
-  }
+    let strng: Vec<&str> = s.split_whitespace().collect();
+    let mut weights: Vec<(u32, u32)> = strng
+        .iter()
+        .map(|e| {
+            let r = e
+                .chars()
+                .map(|c| c.to_digit(10u32).unwrap())
+                .reduce(|cur, nex| cur + nex)
+                .unwrap();
+            (r, e.parse::<u32>().unwrap())
+        })
+        .collect();
+
+    weights.sort();
+    let diffs: Vec<Option<(u32, u32, u32)>> = weights
+        .iter()
+        .enumerate()
+        .map(|(ind, (n, e))| {
+            let next = ind + 1;
+            if next >= weights.len() {
+                return None;
+            } else {
+                Some(((weights[next].0 - n), *n, *e))
+            }
+        })
+        .filter(|&x| x != None)
+        .collect();
+
+    // weight
+    //weights.sort_by(|a,b|(a.0 as i32 -b.0 as i32).cmp(&(b.0 as i32-a.0 as i32)));
+    // weight
+    // print
+    //println!("{:?}",diffs);
+    let fina: Vec<(u32, usize, u32)> = diffs
+        .iter()
+        .take(1)
+        .map(|n| {
+            // the positon of the orginal
+            let (_, t, ans) = n.unwrap();
+            // print t
+            //
+
+            let post = strng
+                .iter()
+                .position(|&x| x == format!("{:?}", ans))
+                .unwrap();
+
+            (t, post, ans)
+        })
+        .collect();
+    format!("{:?}", fina)
 }
 
-
-).filter(|&x|x!=None).collect();
- 
- // weight
-  //weights.sort_by(|a,b|(a.0 as i32 -b.0 as i32).cmp(&(b.0 as i32-a.0 as i32)));
-  // weight 
-  // print 
-  //println!("{:?}",diffs);
-  let fina: Vec<(u32,usize,u32)> = diffs.iter().take(1).map(|n| { 
-// the positon of the orginal
-   let (_,t,ans) = n.unwrap();
-   // print t
-   // 
- 
-let post = strng.iter().position(|&x| x==format!("{:?}",ans)).unwrap();
-
-  (t,post,ans)
-  }).collect();
-   format!("{:?}",fina)
-}
-
- #[inline(always)]
-
- #[allow(dead_code)]
- #[allow(unused_variables)]
+#[inline(always)]
+#[allow(dead_code)]
+#[allow(unused_variables)]
 fn sum_pairs(ints: &[i8], s: i8) -> Option<(i8, i8)> {
+    let mut ind: Vec<(usize, usize)> = vec![];
+    // your code
+    // use half the length
+    for i in 0..ints.len() {
+        for x in 0..(ints.len() - 1) {
+            if x != i && (ints[i] + ints[x]) == s {
+                // push the indexes
+                let t: (usize, usize) = match i.cmp(&x) {
+                    Ordering::Less => (i, x),
+                    Ordering::Greater => (x, i),
+                    _ => (i, x),
+                };
+                // no duplicates
+                if !ind.contains(&t) {
+                    ind.push(t);
+                }
+            }
+        }
+    }
+    // find comp the last index
+    ind.sort_unstable_by(|a, b| a.1.cmp(&b.1));
 
- let mut ind:Vec<(usize,usize)> = vec![];
-  // your code
-  // use half the length
- for  i in 0..ints.len() { 
-   for x in 0..(ints.len()-1) { 
-   if x!=i  && (ints[i]+ints[x])==s { 
-     // push the indexes
-       let t:(usize,usize) =  match i.cmp(&x)  { 
-            Ordering::Less => (i,x),
-            Ordering::Greater => (x,i),
-            _ => (i,x)
+    //println!("{:?}",ind);
 
-       };
-       // no duplicates
-       if !ind.contains(&t) { 
-        ind.push(t);
-       }
-        
-   } 
-
-   }
- }
- // find comp the last index
- ind.sort_unstable_by(|a,b|a.1.cmp(&b.1));
-
- 
- //println!("{:?}",ind);
-
- if  ind.len()>0 { 
-   Some((ints[ind[0].0],ints[ind[0].1]))
- }
-  else { 
-    None
-  }
- 
-  
+    if ind.len() > 0 {
+        Some((ints[ind[0].0], ints[ind[0].1]))
+    } else {
+        None
+    }
 }
- 
+
 use std::collections::HashMap;
 #[allow(dead_code)]
 #[allow(unused_must_use)]
@@ -122,7 +138,7 @@ fn sum_pairs2(ints: &[i8], s: i8) -> Option<(i8, i8)> {
                 .into_iter()
                 .filter(|&y| {
                     indice += 1_i64;
-                    match (*y) as i64  + (*x) as i64 == s as i64 {
+                    match (*y) as i64 + (*x) as i64 == s as i64 {
                         true => {
                             pair.insert(indice + c, Some((*x, *y)));
                             return true;
@@ -131,7 +147,8 @@ fn sum_pairs2(ints: &[i8], s: i8) -> Option<(i8, i8)> {
                     }
                 })
                 .collect::<Vec<_>>()
-                .len() > 0usize
+                .len()
+                > 0usize
         })
         .collect::<Vec<_>>();
     match pair.len() > 0 {
@@ -149,140 +166,152 @@ fn sum_pairs2(ints: &[i8], s: i8) -> Option<(i8, i8)> {
 
 #[allow(dead_code)]
 #[inline(always)]
-fn sum_of_divided(l: Vec<i64>) -> Vec<(i64,i64)> {
-  // your code
-  let mut result:Vec<(i64,i64)> =   l.iter().flat_map(|e|prime_factors(e.abs())).unique().map(|e| { 
- let res = l.iter().filter(|&x|x%&e== 0).sum();
- (e,res)
-
-   }).collect();
-   result.sort();
-   result
+fn sum_of_divided(l: Vec<i64>) -> Vec<(i64, i64)> {
+    // your code
+    let mut result: Vec<(i64, i64)> = l
+        .iter()
+        .flat_map(|e| prime_factors(e.abs()))
+        .unique()
+        .map(|e| {
+            let res = l.iter().filter(|&x| x % &e == 0).sum();
+            (e, res)
+        })
+        .collect();
+    result.sort();
+    result
 }
 
 #[allow(dead_code)]
 
-fn prime_factors( mut n: i64) -> Vec<i64> {
- 
-  // your code
-  let mut factors = vec![];
-for i in 2..=n {
-  while (n%i)==0 {
-factors.push(i);
-n /=i;
-  }
-}
+fn prime_factors(mut n: i64) -> Vec<i64> {
+    // your code
+    let mut factors = vec![];
+    for i in 2..=n {
+        while (n % i) == 0 {
+            factors.push(i);
+            n /= i;
+        }
+    }
 
-   factors
+    factors
 }
-#[allow(dead_code,unused_variables)]
+#[allow(dead_code, unused_variables)]
 #[inline(always)]
 fn dec2_fact_string(mut nb: u64) -> String {
-let  mut base = 1;
-let mut res = String::new();
-let  base36:Vec<char> = "0123456789ABCDEFGHIGKLMNOPQRSTUWXYZ".chars().collect();
-while nb > 0 { 
- res.insert(0,base36[(nb%base) as usize]);
-   
- // increment base
-  nb = nb/base; 
-  base += 1;
- 
-}
+    let mut base = 1;
+    let mut res = String::new();
+    let base36: Vec<char> = "0123456789ABCDEFGHIGKLMNOPQRSTUWXYZ".chars().collect();
+    while nb > 0 {
+        res.insert(0, base36[(nb % base) as usize]);
 
-res
-  // your code
+        // increment base
+        nb = nb / base;
+        base += 1;
+    }
+
+    res
+    // your code
 }
-#[allow(dead_code,unused_variables)]
+#[allow(dead_code, unused_variables)]
 #[inline(always)]
 fn fact_string_2dec(s: String) -> u64 {
-  let mut  res = 0;
-  let mut fact =1; 
-  let  base36:Vec<char> = "0123456789ABCDEFGHIGKLMNOPQRSTUWXYZ".chars().collect();
-   for i in (0..=s.len()-2).rev() { 
-    fact *=s.len()-i-1;
-  res += base36.iter().position(|&x| x== s.chars().nth(i).unwrap()).unwrap() * fact;
-  
-   }
-  // your code
- res as u64
+    let mut res = 0;
+    let mut fact = 1;
+    let base36: Vec<char> = "0123456789ABCDEFGHIGKLMNOPQRSTUWXYZ".chars().collect();
+    for i in (0..=s.len() - 2).rev() {
+        fact *= s.len() - i - 1;
+        res += base36
+            .iter()
+            .position(|&x| x == s.chars().nth(i).unwrap())
+            .unwrap()
+            * fact;
+    }
+    // your code
+    res as u64
 }
 
-#[allow(dead_code,unused_variables)]
+#[allow(dead_code, unused_variables)]
 #[inline(always)]
 fn solve(arr: Vec<i128>) -> (i128, i128) {
-  // your code
-  let num:i128 = arr.chunks(2).map(|e|e.to_vec().into_iter().reduce(|c,n|c*c+n*n).unwrap()).product();
-  //println!("{}",num);
-  
-   let mut res:Vec<(i128,i128)> = vec![];
-     for i in 0..num/10 { 
-       for x in 0..num/10 { 
-          let p = i*i + x*x;
+    // your code
+    let  re: i128 = arr
+        .chunks(2)
+        .map(|e| e.to_vec().into_iter().reduce(|c, n| c * c + n * n).unwrap())
+        .product();
+
+    
+    //println!("{}",num);
+let num = (re as f64).sqrt()   as i128;
+    let mut res: Vec<(i128, i128)> = vec![];
+    for i in 0..num {
+        for x in 0..num  {
+         
+            let p = i.pow(2) + x.pow(2);
             // println!("{:?}",p);
-          if p == num { 
-          
-          match i<x { 
-            true => { 
-             
-              res.push((i,x));
-              
-            },
-            false => { 
-              // do nothing
+            if p == re {
+                match i < x {
+                    true => {
+                        res.push((i, x));
+                    }
+                    false => {
+                        // do nothing
+                    }
+                }
             }
-          }
-          }
-       }
-     }
-   res[0]
+            
+        }
+       
+    }
+    
+    res[0]
 }
-#[allow(dead_code,unused_variables)]
+#[allow(dead_code, unused_variables)]
 #[inline(always)]
 fn convert_fracts(l: Vec<(i64, i64)>) -> Vec<(i64, i64)> {
-  // your code
+    // your code
 
-  let demon = l.iter().fold(1,|a,b| lcm(b.1,a));
+    let demon = l.iter().fold(1, |a, b| lcm(b.1, a));
 
-    l.iter().map(|n|(n.0*demon/n.1,n.1*demon/n.1)).collect()
+    l.iter()
+        .map(|n| (n.0 * demon / n.1, n.1 * demon / n.1))
+        .collect()
 }
-#[allow(dead_code,unused_variables)]
+#[allow(dead_code, unused_variables)]
 #[inline(always)]
-fn gcd (a:i64,b:i64) -> i64 { 
- if b == 0 { 
-  a
-  }
-  else {
-gcd(b,a%b)
-  }
+fn gcd(a: i64, b: i64) -> i64 {
+    if b == 0 {
+        a
+    } else {
+        gcd(b, a % b)
+    }
 }
-#[allow(dead_code,unused_variables)]
+#[allow(dead_code, unused_variables)]
 #[inline(always)]
-fn lcm(d1:i64,d2:i64) -> i64 { 
-  d1*d2 /gcd(d1, d2)
+fn lcm(d1: i64, d2: i64) -> i64 {
+    d1 * d2 / gcd(d1, d2)
 }
 /*
 #[allow(dead_code,unused_variables,non_snake_case)]
 fn choose_best_sum(t: i32, k: i32, ls: &Vec<i32>) -> i32 {
   // your code
   let mut biggestCount = 0;
-  let recurseTowns = |townsofar:&Vec<i32>,lastIndex:usize|  { 
-    if townsofar.len() ==k as usize  { 
+  let recurseTowns = |townsofar:&Vec<i32>,lastIndex:usize|  {
+    if townsofar.len() ==k as usize  {
       let sumDistance:i32 = townsofar.iter().sum();
-      if sumDistance <=t && sumDistance > biggestCount { 
+      if sumDistance <=t && sumDistance > biggestCount {
         biggestCount = sumDistance;
       }
     }
-     
-    for i in (lastIndex+1)..= ls.len() { 
+
+    for i in (lastIndex+1)..= ls.len() {
       let mut v = townsofar.to_vec();
       v.push(ls[i]);
       recurseTowns(&v,i);
     }
   recurseTowns();
-  return biggestCount 
+  return biggestCount
   };
-  
+
   1
 }
 */
@@ -290,87 +319,151 @@ fn choose_best_sum(t: i32, k: i32, ls: &Vec<i32>) -> i32 {
 #[allow(dead_code)]
 #[inline]
 fn solequa(n: u64) -> Vec<(u64, u64)> {
-  let mut v = vec![];
-  // your code
-  for x in 1..n {
-      
-       for y in 1..n {
-            if y !=n { 
-            let left = x as f64;
-            let right = y as f64;
-             let result = (left-2.0*right) * (left+2.0*right);
-           //println!("{:?} {}",x,y);
-           if result ==  (n as f64) {
-               v.push((x,y))
-           }
-          }
-      }
-  }
-    v.sort_by(|a,b|b.1.cmp(&a.1));
-  v 
+    let mut v = vec![];
+    // your code
+    for x in 1..n {
+        for y in 1..n {
+            if y != n {
+                let left = x as f64;
+                let right = y as f64;
+                let result = (left - 2.0 * right) * (left + 2.0 * right);
+                //println!("{:?} {}",x,y);
+                if result == (n as f64) {
+                    v.push((x, y))
+                }
+            }
+        }
+    }
+    v.sort_by(|a, b| b.1.cmp(&a.1));
+    v
 }
 // using iterators
 #[allow(dead_code)]
-#[inline] 
-fn solequa_two(n:u64) -> Vec<(u64, u64)> { 
-  (1..=n).map(|x| {
-    
-    if let Some(y)= (1..n).filter(|&y| {
-  
-      let left = x as f64;
-      let right = y as f64;
-       let result = (left-2.0*right) * (left+2.0*right);
-     //println!("{:?} {}",x,y);
-     return  result ==  (n as f64) 
-    
-    
-  
-
-
-  }).nth(0) { 
-    (x,y)
-  } 
-  else { 
-    (0,0)
-  }
-
-
-} ).filter(|&e|e!=(0,0)).collect()
+#[inline]
+fn solequa_two(n: u64) -> Vec<(u64, u64)> {
+    (1..=n)
+        .map(|x| {
+            if let Some(y) = (1..n)
+                .filter(|&y| {
+                    let left = x as f64;
+                    let right = y as f64;
+                    let result = (left - 2.0 * right) * (left + 2.0 * right);
+                    //println!("{:?} {}",x,y);
+                    return result == (n as f64);
+                })
+                .nth(0)
+            {
+                (x, y)
+            } else {
+                (0, 0)
+            }
+        })
+        .filter(|&e| e != (0, 0))
+        .collect()
 }
-
+#[allow(dead_code,unused_variables)]
 fn snail(matrix: &[Vec<i32>]) -> Vec<i32> {
-  // enjoy
+    // enjoy
 
-  let mut fina = vec![];
-  let mut arr = matrix.to_vec();
+    let mut fina = vec![];
+    let mut arr = matrix.to_vec();
 
-  while  arr.len() >0 { 
- fina.append(&mut arr.remove(0));
-    for i in 0..arr.len() { 
-       if let Some (val) = arr[i].pop() { 
-        fina.push(val);
-       }
-     
+    while arr.len() > 0 {
+        fina.append(&mut arr.remove(0));
+        for i in 0..arr.len() {
+            if let Some(val) = arr[i].pop() {
+                fina.push(val);
+            }
+        }
+
+        arr.reverse();
+
+        for i in 0..arr.len() {
+            arr[i].reverse();
+        }
+        //println!(" arr = {:?}, final = {:?}",arr,fina);
     }
-
-    arr.reverse();
-   
-   for i in 0..arr.len() { 
-     arr[i].reverse();
-   }
-   //println!(" arr = {:?}, final = {:?}",arr,fina);
-  }
-  fina
+    fina
+}
+#[allow(dead_code,unused_variables)]
+fn create_3n(n: i32) -> Vec<Vec<i32>> {
+    let arr: Vec<i32> = (1..=n).collect();
+    arr.as_slice().chunks(3).map(|e| e.to_vec()).collect()
 }
 
-fn create_3n(n:i32) ->Vec<Vec<i32>> { 
-    let arr:Vec<i32> = (1..=n).collect();
-     arr.as_slice().chunks(3).map(|e|e.to_vec()).collect()
+#[allow(dead_code)]
+fn decomp(n:i32) -> String { 
+ let mut  primes = vec![2,3];
 
+ let mut k = 5;
+ while k <= n { 
+     if is_prime(k) { 
+         primes.push(k);
+     }
+     k+=2;
+ }
+ //println!("{:?}",primes);
+
+ let mut fact_string = String::new();
+  for i in 0.. primes.len() { 
+      #[allow(non_snake_case)]
+      let mut N = n;
+      let mut index = n;
+
+      while N > 0 { 
+
+        index -= N%primes[i];
+        N = (N- (N%primes[i]) )/ primes[i];
+ //eprint!("{}",N);
+      }
+       index /= primes[i] -1;
+      if index > 1 { 
+          fact_string.push_str(&format!("{}",format_args!("{}^{} * ",primes[i],index)));
+      }
+      else { 
+        fact_string.push_str(&format!("{}",format_args!("{} * ",primes[i])));
+      }
+
+
+  }
+   fact_string[0..fact_string.len()-3].to_string()
+}
+
+// isPrime
+fn is_prime(num:i32) -> bool {
+ if num %2 ==0 || num %3 ==0 { 
+     return false
+ }
+ let mut d = 5;
+
+  let root = (num as f32).sqrt() as i32;
+  while d<= root { 
+      if num % d ==0 || num % (d+2) ==0 { 
+          return false 
+      }
+      else { 
+          d+=6;
+      }
+  }
+ true
+}
+
+pub fn range_extraction(a: &[i32]) -> String {
+let mut result= a.into_iter().enumerate().map(|(i,v)| { 
+    if a.get(i-1).unwrap() == &(v-1) && a [i+1] == v+1 { 
+        String::from("-")
+    }
+    else { 
+        v.to_string()
+    }
+});
+
+    // Your solution here
+
+    result.clone().enumerate().filter(|(i,v)| v!= "-"||  result.nth( if  i >&0 {i-1} else {0}).unwrap() !="-").map(|e|e.1).join(",")
 }
 
 #[cfg(test)]
-
 #[test]
 fn returns_expected() {
     let l1 = [1, 4, 8, 7, 3, 15];
@@ -392,49 +485,143 @@ fn returns_expected() {
 }
 #[allow(dead_code)]
 fn testing(l: Vec<i64>, exp: Vec<(i64, i64)>) -> () {
-  assert_eq!(sum_of_divided(l), exp)
+    assert_eq!(sum_of_divided(l), exp)
 }
 
 #[test]
 fn basics_sum_of_divided() {
-  
-  testing(vec![12, 15], vec![ (2, 12), (3, 27), (5, 15) ]);
-  testing(vec![15,21,24,30,45], vec![ (2, 54), (3, 135), (5, 90), (7, 21) ]);
-  testing(vec![15,21,24,30,-45], vec![ (2, 54), (3, 45), (5, 0), (7, 21) ]);
-  testing(vec![107, 158, 204, 100, 118, 123, 126, 110, 116, 100], 
-      vec![ (2, 1032), (3, 453), (5, 310), (7, 126), (11, 110), (17, 204), (29, 116), (41, 123), (59, 118), (79, 158), (107, 107) ]);
-  testing(vec![-29804, -4209, -28265, -72769, -31744], 
-      vec![ (2, -61548), (3, -4209), (5, -28265), (23, -4209), (31, -31744), (53, -72769), (61, -4209), (1373, -72769), (5653, -28265), (7451, -29804) ]);
-  testing(vec![], vec![]);
-  testing(vec![1070, 1580, 2040, 1000, 1180, 1230, 1260, 1100, 1160, 1000], 
-      vec![ (2, 12620), (3, 4530), (5, 12620), (7, 1260), (11, 1100), (17, 2040), (29, 1160), (41, 1230), (59, 1180), (79, 1580), (107, 1070) ]);
-  testing(vec![17, 34, 51, 68, 102], vec![ (2, 204), (3, 153), (17, 272) ]);
-  testing(vec![17, -17, 51, -51], vec![ (3, 0), (17, 0) ]);
-  testing(vec![173471], vec![ (41, 173471), (4231, 173471) ]);
+    testing(vec![12, 15], vec![(2, 12), (3, 27), (5, 15)]);
+    testing(
+        vec![15, 21, 24, 30, 45],
+        vec![(2, 54), (3, 135), (5, 90), (7, 21)],
+    );
+    testing(
+        vec![15, 21, 24, 30, -45],
+        vec![(2, 54), (3, 45), (5, 0), (7, 21)],
+    );
+    testing(
+        vec![107, 158, 204, 100, 118, 123, 126, 110, 116, 100],
+        vec![
+            (2, 1032),
+            (3, 453),
+            (5, 310),
+            (7, 126),
+            (11, 110),
+            (17, 204),
+            (29, 116),
+            (41, 123),
+            (59, 118),
+            (79, 158),
+            (107, 107),
+        ],
+    );
+    testing(
+        vec![-29804, -4209, -28265, -72769, -31744],
+        vec![
+            (2, -61548),
+            (3, -4209),
+            (5, -28265),
+            (23, -4209),
+            (31, -31744),
+            (53, -72769),
+            (61, -4209),
+            (1373, -72769),
+            (5653, -28265),
+            (7451, -29804),
+        ],
+    );
+    testing(vec![], vec![]);
+    testing(
+        vec![1070, 1580, 2040, 1000, 1180, 1230, 1260, 1100, 1160, 1000],
+        vec![
+            (2, 12620),
+            (3, 4530),
+            (5, 12620),
+            (7, 1260),
+            (11, 1100),
+            (17, 2040),
+            (29, 1160),
+            (41, 1230),
+            (59, 1180),
+            (79, 1580),
+            (107, 1070),
+        ],
+    );
+    testing(
+        vec![17, 34, 51, 68, 102],
+        vec![(2, 204), (3, 153), (17, 272)],
+    );
+    testing(vec![17, -17, 51, -51], vec![(3, 0), (17, 0)]);
+    testing(vec![173471], vec![(41, 173471), (4231, 173471)]);
 
-  testing(vec![24,18,92,88,99], vec![ ( 2, 222 ), ( 3, 141 ), ( 11, 187 ), ( 23, 92 ) ]);
-  testing(vec![26,54,65,70,63,93], vec![ ( 2, 150 ), ( 3, 210 ), ( 5, 135 ), ( 7, 133 ), ( 13, 91 ), ( 31, 93 ) ] ); 
-  testing(vec![75,20,-23,86,21], vec![ ( 2, 106 ), ( 3, 96 ), ( 5, 95 ), ( 7, 21 ), ( 23, -23 ), ( 43, 86 ) ] );
-  testing(vec![70,-44,90,76], vec![ ( 2, 192 ), ( 3, 90 ), ( 5, 160 ), ( 7, 70 ), ( 11, -44 ), ( 19, 76 ) ] ); 
-  testing(vec![56,-49,53,56,-35,49,100], vec![ ( 2, 212 ), ( 5, 65 ), ( 7, 77 ), ( 53, 53 ) ]);
+    testing(
+        vec![24, 18, 92, 88, 99],
+        vec![(2, 222), (3, 141), (11, 187), (23, 92)],
+    );
+    testing(
+        vec![26, 54, 65, 70, 63, 93],
+        vec![(2, 150), (3, 210), (5, 135), (7, 133), (13, 91), (31, 93)],
+    );
+    testing(
+        vec![75, 20, -23, 86, 21],
+        vec![(2, 106), (3, 96), (5, 95), (7, 21), (23, -23), (43, 86)],
+    );
+    testing(
+        vec![70, -44, 90, 76],
+        vec![(2, 192), (3, 90), (5, 160), (7, 70), (11, -44), (19, 76)],
+    );
+    testing(
+        vec![56, -49, 53, 56, -35, 49, 100],
+        vec![(2, 212), (5, 65), (7, 77), (53, 53)],
+    );
 
-  testing(vec![-50,73,55,90,35,46], vec![ ( 2, 86 ), ( 3, 90 ), ( 5, 130 ), ( 7, 35 ), ( 11, 55 ), ( 23, 46 ), ( 73, 73 ) ] ); 
-  testing(vec![93,96,-13,96,41,-18,19], vec![ ( 2, 174 ), ( 3, 267 ), ( 13, -13 ), ( 19, 19 ), ( 31, 93 ), ( 41, 41 ) ] ); 
-  testing(vec![37,13,19,33,-18,79,26], vec![ ( 2, 8 ), ( 3, 15 ), ( 11, 33 ), ( 13, 39 ), ( 19, 19 ), ( 37, 37 ), ( 79, 79 ) ] );
-  testing(vec![-10,22,86,33,-19,86,48], vec![ ( 2, 232 ), ( 3, 81 ), ( 5, -10 ), ( 11, 55 ), ( 19, -19 ), ( 43, 172 ) ] );
-  testing(vec![42,20,43,-44], vec![ ( 2, 18 ), ( 3, 42 ), ( 5, 20 ), ( 7, 42 ), ( 11, -44 ), ( 43, 43 ) ] );
+    testing(
+        vec![-50, 73, 55, 90, 35, 46],
+        vec![
+            (2, 86),
+            (3, 90),
+            (5, 130),
+            (7, 35),
+            (11, 55),
+            (23, 46),
+            (73, 73),
+        ],
+    );
+    testing(
+        vec![93, 96, -13, 96, 41, -18, 19],
+        vec![(2, 174), (3, 267), (13, -13), (19, 19), (31, 93), (41, 41)],
+    );
+    testing(
+        vec![37, 13, 19, 33, -18, 79, 26],
+        vec![
+            (2, 8),
+            (3, 15),
+            (11, 33),
+            (13, 39),
+            (19, 19),
+            (37, 37),
+            (79, 79),
+        ],
+    );
+    testing(
+        vec![-10, 22, 86, 33, -19, 86, 48],
+        vec![(2, 232), (3, 81), (5, -10), (11, 55), (19, -19), (43, 172)],
+    );
+    testing(
+        vec![42, 20, 43, -44],
+        vec![(2, 18), (3, 42), (5, 20), (7, 42), (11, -44), (43, 43)],
+    );
 }
 #[allow(dead_code)]
 fn testing1(nb: u64, exp: &str) -> () {
-  assert_eq!(&dec2_fact_string(nb), exp)
+    assert_eq!(&dec2_fact_string(nb), exp)
 }
 #[allow(dead_code)]
 fn testing2(s: &str, exp: u64) -> () {
-  assert_eq!(fact_string_2dec(s.to_string()), exp)
+    assert_eq!(fact_string_2dec(s.to_string()), exp)
 }
 #[test]
 fn basics_dec2_fact_string() {
-
     testing1(2982, "4041000");
     testing1(463, "341010");
     testing1(36288000, "A0000000000");
@@ -460,11 +647,9 @@ fn basics_dec2_fact_string() {
     testing1(86565208, "218474232200");
     testing1(1806792694, "3929024133200");
     testing1(12942219, "35576140110");
-    
 }
 #[test]
 fn basics_fact_string_2dec() {
-
     testing2("4041000", 2982);
     testing2("27A0533231100", 1273928000);
     testing2("341010", 463);
@@ -491,18 +676,17 @@ fn basics_fact_string_2dec() {
     testing2("112086032303100", 94394539820);
     testing2("30A3700211000", 1474663950);
     testing2("156B92750141010", 121660182223);
-    
 }
 
 #[cfg(test)]
-    mod tests {
+mod tests {
     use super::*;
 
     fn calc(arr: &Vec<i128>) -> i128 {
-        let mut p:i128 = 1;
+        let mut p: i128 = 1;
         let mut i = 0;
         while i < (arr.len() - 1) {
-            p *= arr[i] * arr[i] + arr[i+1] * arr[i+1];
+            p *= arr[i] * arr[i] + arr[i + 1] * arr[i + 1];
             i = i + 2;
         }
         return p;
@@ -512,13 +696,12 @@ fn basics_fact_string_2dec() {
             println!("A and B should be nonnegative integers");
             return false;
         } else {
-            let p = res.0*res.0 + res.1*res.1;
+            let p = res.0 * res.0 + res.1 * res.1;
             let pp = calc(arr);
             if p != pp {
                 println!("Incorrect sum of squares");
                 return false;
-            }
-            else {
+            } else {
                 return true;
             }
         }
@@ -539,44 +722,33 @@ fn basics_fact_string_2dec() {
         dotest(&a);
         a = vec![3, 9, 8, 4, 6, 8, 7, 8, 4, 8, 5, 6, 6, 4, 4, 5];
         dotest(&a);
-
     }
 }
 
+#[test]
+fn sample_test1() {
+    let square = &[vec![1, 2, 3], vec![4, 5, 6], vec![7, 8, 9]];
+    let expected = vec![1, 2, 3, 6, 9, 8, 7, 4, 5];
+    assert_eq!(snail(square), expected);
+}
 
-    #[test]
-    fn sample_test1() {
-        let square = &[
-            vec![1,2,3],
-            vec![4,5,6],
-            vec![7,8,9],
-        ];
-        let expected = vec![1,2,3,6,9,8,7,4,5];
-        assert_eq!(snail(square), expected);
-    }
-    
-    #[test]
-    fn sample_test2() {
-        let square = &[
-            vec![1,2,3],
-            vec![8,9,4],
-            vec![7,6,5],
-        ];
-        let expected = vec![1,2,3,4,5,6,7,8,9];
-        assert_eq!(snail(square), expected);
-    }
-    
-    #[test]
-    fn sample_test3() {
-        let square: &[Vec<i32>; 1] = &[Vec::new()];
-        let expected = Vec::new();
-        assert_eq!(snail(square), expected, "Failed with empty input");
-    }
-    
-    #[test]
-    fn sample_test4() {
-        let square = &[vec![1]];
-        let expected = vec![1];
-        assert_eq!(snail(square), expected);
-    }
+#[test]
+fn sample_test2() {
+    let square = &[vec![1, 2, 3], vec![8, 9, 4], vec![7, 6, 5]];
+    let expected = vec![1, 2, 3, 4, 5, 6, 7, 8, 9];
+    assert_eq!(snail(square), expected);
+}
 
+#[test]
+fn sample_test3() {
+    let square: &[Vec<i32>; 1] = &[Vec::new()];
+    let expected = Vec::new();
+    assert_eq!(snail(square), expected, "Failed with empty input");
+}
+
+#[test]
+fn sample_test4() {
+    let square = &[vec![1]];
+    let expected = vec![1];
+    assert_eq!(snail(square), expected);
+}

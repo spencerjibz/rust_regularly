@@ -80,7 +80,7 @@ fn main() -> ! {
     let mut delay = delay::Delay::<clock::MHz16>::new();
     let  sensor= pins.d2.into_tri_state (&mut pins.ddr);
     // initialize DHT data transfer
-    
+
 #[allow(unused_must_use)] 
     
   
