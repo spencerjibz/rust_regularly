@@ -24,7 +24,7 @@ fn main() {
     // println!("{}",nb_year(40, 2.0, -10, 5000));
     //println!("{}",next_bigger_number(12));
     let now = Instant::now();
-    println!(" numbers = {:?}",list_squared(1,250));
+    println!(" numbers = {:?}", doubles(10,1000));
     //println!("{:?}",ips_between2("20.0.0.10", "20.0.1.0"));
     //println!("{:?}",prime_factors(17*17*93*677));
     //println!("{:?}",ips_between2("20.0.0.10", "20.0.1.0"));
@@ -1065,4 +1065,39 @@ fn buddy(start: i64, limit: i64) -> Option<(i64, i64)> {
     print!("{} , result = {}", start, s(start));
 
     None
+}
+ 
+fn doubles(maxk: i32, maxn: i32) -> f64{
+  
+     let mut s = 0.0f64;
+      let mut k=1;
+       
+       while k< maxk { 
+            for n in 1..maxn { 
+                 s+= val(k as f64,n as f64);
+                
+            }
+            k+=1;
+       }
+      s
+}
+ fn val (k:f64,m:f64) -> f64 { 
+      1.0/(k  * (m + 1.0).powf(2.0*k))
+ }
+use float_eq::{float_eq};
+fn assert_float_equals(actual: f64, expected: f64) {
+    let merr = 1.0e-12;
+    let res = float_eq!(actual, expected, abs <= merr) || float_eq!(actual, expected, rmax <= merr);
+    assert!(res, "Expected value must be near: {:e} but was:{:e}", expected, actual);
+}
+
+fn dotest(maxk: i32, maxn: i32, exp: f64) -> () {
+    assert_float_equals(doubles(maxk, maxn), exp);
+}
+
+#[test]
+fn basic_tests_doubles() {
+    dotest(1, 10, 0.5580321939764581);
+    dotest(10, 1000, 0.6921486500921933);
+    dotest(10, 10000, 0.6930471674194457);
 }

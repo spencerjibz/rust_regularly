@@ -11,6 +11,7 @@ use std::os::windows::process::{CommandExt};
 fn main () {
     let mut sys = System::new_all();
     let dt = Utc::now();
+    let now = Instant::now();
     // refresh before start
     sys.refresh_all();
     dt.format("%Y-%m-%d %H:%M:%S").to_string();
@@ -29,12 +30,15 @@ fn main () {
              Some(val) => { 
                   // increase count
                    instances = Some(val.pid());
-                   running_instances +=1;
+                  
+                    running_instances +=1;
              }
          }
          
 
    });
+ //  count the running instances of the miner
+  println!("running {:?}",now.elapsed());
 
 if sys.processes_by_name("miner_manager").filter(|v|v.pid()!=current_pid).count()> 0 { 
  let _caution = "\u{26A0}\u{FE0F}".bold();
@@ -53,7 +57,7 @@ sys.refresh_all();
 
 
 // find all qpu intensive processes by
- let gpu_intensive_count = sys.processes().values().filter(|e|e.name().contains("mpc")||e.name().contains("madHC")||e.name().contains("RocketLeague")||e.name().contains("left4dead")).count();
+ let gpu_intensive_count = sys.processes().values().filter(|e|e.name().contains("mpc")||e.name().contains("madHC")||e.name().contains("RocketLeague")||e.name().contains("left4dead") ||e.name().to_ascii_lowercase().contains("valorant")).count();
  println!("{}{}:","processes with high GPU usage: ".bold().truecolor(173,216,230),gpu_intensive_count.to_string().truecolor(173,216,230));
    
 if gpu_intensive_count >0 { 
@@ -88,7 +92,7 @@ else {
   
 //restart mining 
 Command::new("cmd")
-.args(["/C","C:\\Users\\Spencer\\Desktop\\miner\\t-rex.exe  -a ethash -o stratum+tcp://eu1.ethermine.org:4444 -u 0x86AE5f19c53bF3408A89ABFae2aE7670DC366B57 -p x -w gtwx10606gb --mt 2"])
+.args(["/C","C:\\Users\\Spencer\\Desktop\\miner\\t-rex.exe  -a ethash -o stratum+tcp://eu1.ethermine.org:4444 -u 0x86AE5f19c53bF3408A89ABFae2aE7670DC366B57 -p x -w gtwx10606gb --mt 3  --pl 100 --fan 69   --cclock 100 --mclock 500"])
 .creation_flags(0x00000010) // CREATE_NEW_CONSOLE
 
 .spawn()
@@ -111,6 +115,7 @@ else  {
 
 // sleep for  10 seconds
 thread::sleep(Duration::from_secs(10));
+
 println!(" Executed in : {:?}",now.elapsed());
     }
 }

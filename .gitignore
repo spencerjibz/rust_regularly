@@ -3,9 +3,9 @@
 
 # Added by cargo
 
+/*/.vscode/
 
-
-
+/*/node_modules/
 # Added by cargo
 
 /target

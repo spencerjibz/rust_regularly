@@ -1,0 +1,53 @@
+{
+  "0 debug pnpm:scope": {
+    "selected": 1
+  },
+  "1 debug pnpm:package-manifest": {
+    "initial": {
+      "name": "node_addon",
+      "version": "1.0.0",
+      "description": "",
+      "main": "index.js",
+      "type": "module",
+      "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+      },
+      "keywords": [],
+      "author": "",
+      "license": "ISC"
+    },
+    "prefix": "C:\\Users\\Spencer\\Desktop\\Rust-projects\\node_addon"
+  },
+  "2 debug pnpm:context": {
+    "currentLockfileExists": false,
+    "storeDir": "C:\\Users\\Spencer\\AppData\\Local\\pnpm\\store\\v3",
+    "virtualStoreDir": "C:\\Users\\Spencer\\Desktop\\Rust-projects\\node_addon\\node_modules\\.pnpm"
+  },
+  "3 debug pnpm:stage": {
+    "prefix": "C:\\Users\\Spencer\\Desktop\\Rust-projects\\node_addon",
+    "stage": "resolution_started"
+  },
+  "4 error pnpm": {
+    "code": "ERR_PNPM_FETCH_404",
+    "hint": "Jest is not in the npm registry, or you have no permission to fetch it.\n\nNo authorization header was set for the request.",
+    "request": {
+      "url": "https://registry.npmjs.org/Jest"
+    },
+    "response": {
+      "size": 0
+    },
+    "pkgName": "Jest",
+    "spec": {
+      "fetchSpec": "latest",
+      "name": "Jest",
+      "type": "tag"
+    },
+    "pkgsStack": [],
+    "err": {
+      "name": "pnpm",
+      "message": "GET https://registry.npmjs.org/Jest: Not Found - 404",
+      "code": "ERR_PNPM_FETCH_404",
+      "stack": "pnpm: GET https://registry.npmjs.org/Jest: Not Found - 404\n    at RetryOperation._fn (C:\\Users\\Spencer\\AppData\\Roaming\\nvm\\v14.19.0\\node_modules\\pnpm\\dist\\pnpm.cjs:85566:19)\n    at processTicksAndRejections (internal/process/task_queues.js:95:5)"
+    }
+  }
+}
