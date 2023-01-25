@@ -1,0 +1,8 @@
+c:\Users\Spencer\Desktop\Rust-projects\node_addon\wasi_func\target\wasm32-unknown-unknown\debug\deps\wasm_bindgen_futures-af08598d8360948b.rmeta: C:\Users\Spencer\.cargo\registry\src\github.com-1ecc6299db9ec823\wasm-bindgen-futures-0.4.30\src\lib.rs C:\Users\Spencer\.cargo\registry\src\github.com-1ecc6299db9ec823\wasm-bindgen-futures-0.4.30\src\queue.rs C:\Users\Spencer\.cargo\registry\src\github.com-1ecc6299db9ec823\wasm-bindgen-futures-0.4.30\src\task\wait_async_polyfill.rs C:\Users\Spencer\.cargo\registry\src\github.com-1ecc6299db9ec823\wasm-bindgen-futures-0.4.30\src\task\multithread.rs
+
+c:\Users\Spencer\Desktop\Rust-projects\node_addon\wasi_func\target\wasm32-unknown-unknown\debug\deps\wasm_bindgen_futures-af08598d8360948b.d: C:\Users\Spencer\.cargo\registry\src\github.com-1ecc6299db9ec823\wasm-bindgen-futures-0.4.30\src\lib.rs C:\Users\Spencer\.cargo\registry\src\github.com-1ecc6299db9ec823\wasm-bindgen-futures-0.4.30\src\queue.rs C:\Users\Spencer\.cargo\registry\src\github.com-1ecc6299db9ec823\wasm-bindgen-futures-0.4.30\src\task\wait_async_polyfill.rs C:\Users\Spencer\.cargo\registry\src\github.com-1ecc6299db9ec823\wasm-bindgen-futures-0.4.30\src\task\multithread.rs
+
+C:\Users\Spencer\.cargo\registry\src\github.com-1ecc6299db9ec823\wasm-bindgen-futures-0.4.30\src\lib.rs:
+C:\Users\Spencer\.cargo\registry\src\github.com-1ecc6299db9ec823\wasm-bindgen-futures-0.4.30\src\queue.rs:
+C:\Users\Spencer\.cargo\registry\src\github.com-1ecc6299db9ec823\wasm-bindgen-futures-0.4.30\src\task\wait_async_polyfill.rs:
+C:\Users\Spencer\.cargo\registry\src\github.com-1ecc6299db9ec823\wasm-bindgen-futures-0.4.30\src\task\multithread.rs:
