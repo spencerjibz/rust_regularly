@@ -57,7 +57,7 @@ sys.refresh_all();
 
 
 // find all qpu intensive processes by
- let gpu_intensive_count = sys.processes().values().filter(|e|e.name().contains("mpc")||e.name().contains("madHC")||e.name().contains("RocketLeague")||e.name().contains("left4dead") ||e.name().to_ascii_lowercase().contains("valorant")).count();
+ let gpu_intensive_count = sys.processes().values().filter(|e|e.name().contains("mpc")||e.name().contains("madHC")||e.name().contains("RocketLeague")||e.name().contains("left4dead") ||e.name().to_ascii_lowercase().contains("valorant")||e.name().contains("pcsx2")).count();
  println!("{}{}:","processes with high GPU usage: ".bold().truecolor(173,216,230),gpu_intensive_count.to_string().truecolor(173,216,230));
    
 if gpu_intensive_count >0 { 

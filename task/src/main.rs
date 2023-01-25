@@ -1,4 +1,5 @@
 #![allow(dead_code,unused_variables)]
+#![allow(unused_imports)]
 use itertools::Itertools;
 #[allow(unused_imports)]
 use num::{
@@ -20,18 +21,20 @@ use std::convert::TryInto;
 use std::iter::successors;
 use std::net::Ipv4Addr;
 use std::time::Instant;
+use rayon::prelude::*;
 fn main() {
     // println!("{}",nb_year(40, 2.0, -10, 5000));
     //println!("{}",next_bigger_number(12));
     let now = Instant::now();
-    println!(" numbers = {:?}", doubles(10,1000));
+    let n = 100000;
+     //println!("{}",find_reverse_number(n));
     //println!("{:?}",ips_between2("20.0.0.10", "20.0.1.0"));
     //println!("{:?}",prime_factors(17*17*93*677));
     //println!("{:?}",ips_between2("20.0.0.10", "20.0.1.0"));
 
     //println!("{:?}",gap(2,1,100));
 
-    //println!("{:?}",big_fact(4000));
+    println!("{:?}",big_fact(1000));
 
     /*
      assert_eq!(add_arrays(&[6, 7], &[6, 7]), [1, 3, 4]);
@@ -73,7 +76,7 @@ fn order_weight(s: &str) -> String {
     // sort number by
     let num = |st: &str| st.get(0..=1).unwrap().parse::<i32>().unwrap_or(0);
     //let digs = |st:&str|   st.chars().filter(|&e|e!='0').join("").parse::<i32>().unwrap();
-    v.sort_by(|a, b| {
+    v.sort_unstable_by(|a, b| {
         match compared(a).cmp(&compared(b)) {
             Ordering::Less => Ordering::Less,
             Ordering::Greater => Ordering::Greater,
@@ -142,7 +145,7 @@ fn next_bigger_number(n: i64) -> i64 {
     }
     right.remove(mmi.unwrap() as usize);
     right.push(pv);
-    right.sort();
+    right.sort_unstable();
 
     // concat the left  + new pivot + right part
     d.push(mm.unwrap());
@@ -793,8 +796,8 @@ fn part(n: i64) -> String {
         .unique()
         .collect();
     let len = parts.len();
-    parts.sort();
-    println!("{:?}", parts);
+    parts.sort_unstable();
+    //println!("{:?}", parts);
     // handle if here is one Element
     if len == 1 {
         return format!(
@@ -892,7 +895,7 @@ fn solequa(n: u32) -> Vec<(u64, u64)> {
                 println!("{:?}", result);
                 if result == BigInt::from(n) {
                     v.push((x as u64, y as u64));
-                    v.sort();
+                    v.sort_unstable();
                 }
             }
         }
@@ -1101,3 +1104,30 @@ fn basic_tests_doubles() {
     dotest(10, 1000, 0.6921486500921933);
     dotest(10, 10000, 0.6930471674194457);
 }
+
+fn reverse_number(e: u64) -> bool {
+    let mut n = e;
+    let mut rev = 0;
+    while n != 0 {
+       let r = n % 10;
+       rev = rev * 10 + r;
+       n = n / 10;
+    }
+    rev  == e
+ }
+ fn rev(n: u64) -> bool {
+   // convert the number to chars
+   let s = n.to_string();
+   // reverse the string
+   let re  = s.chars().rev().collect::<String>();
+     re  == s
+
+
+ }
+ 
+ fn find_reverse_number(n: u64) -> u64 {
+     let ind =  if n>0 { n - 1 } else {n};
+  (0u64..).filter(|r|reverse_number(*r)).nth(ind as usize).unwrap()
+
+    
+ }

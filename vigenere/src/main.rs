@@ -12,7 +12,7 @@ fn main() {
 struct Vigenere {
     alphabet: Vec<char>,
     key: &'static str,
-
+//   key: String,
     shifts: Vec<usize>,
 }
 

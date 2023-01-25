@@ -9,3 +9,4 @@ edition = "2018"
 [dependencies]
 itertools = "0.10.0"
 num = "0.4.0"
+rayon = "1.5.2"

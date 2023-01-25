@@ -3,21 +3,23 @@ name = "node_addon"
 version = "0.1.0"
 edition = "2021"
 
-
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [lib]
-crate-type = ["cdylib"]
+name = "addon"
+crate-type = [ "cdylib"]
+
 
 [dependencies]
 # Default enable napi4 feature, see https://nodejs.org/api/n-api.html#node-api-version-matrix
 napi = { version = "2.2.0", default-features = false, features = ["napi6"] }
 napi-derive = "2.2.0"
 rand = "0.8.0"
-
+num = "0.4.0"
+rayon = "1.5.2"
+smallvec = "1.9.0"
 [build-dependencies]
 napi-build = "1.2.1"
-
+anyhow = "1.0.57"
 [profile.release]
 lto = "fat"
 strip = "debuginfo"

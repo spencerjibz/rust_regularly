@@ -1,7 +1,10 @@
-use itertools::Itertools;
+
 use num::{bigint::BigUint, One, Zero};
 use std::fmt::{Display, Formatter};
+use rayon::prelude::*;
 use std::time::Instant;
+use std::collections::HashSet;
+use std::iter::FromIterator;
 #[derive(Clone, Debug)]
 pub struct Factors {
     pub number: BigUint,
@@ -81,17 +84,22 @@ fn print_factors(number: BigUint) {
 
 #[allow(dead_code)]
 #[inline(always)]
-fn big_fact(n: i64) -> BigUint {
-    (1..=n).fold(BigUint::from(1u32), |c, n| c * BigUint::from(n as u32))
+fn big_fact(n: i64,multithread:bool) -> BigUint {
+     if multithread {
+(1..=(n as u64)).into_par_iter().map(|e| BigUint::from(e)).reduce_with( |c, n|c * n).unwrap();
+     }
+    
+    // normal
+    (1..=n as u64).fold(BigUint::from(1u64),|c,n| BigUint::from(c)* BigUint::from(n))
 }
 #[allow(dead_code)]
 #[inline(always)]
-fn decomp(n: i64) -> String {
-    let factors: Vec<BigUint> = Factors::of(big_fact(n)).result;
-
-    let s = factors
-        .iter()
-        .unique()
+fn decomp(n: i64,multi:bool) -> String {
+    let factors: Vec<BigUint> = Factors::of(big_fact(n,multi)).result;
+    let set:HashSet<BigUint> =  HashSet::from_iter(factors.clone());
+    if multi {
+        set.par_iter()
+        
         .map(|e| {
             let num = factors.iter().filter(|&el| el == e).count();
             //println!(" {} = {} elements",e,num);
@@ -100,13 +108,29 @@ fn decomp(n: i64) -> String {
             }
             format!("{}", e)
         })
-        .join(" * ");
-    s
+        .reduce_with(|a,b|a +" * "+&b).unwrap();
+        
+
+    }
+        set.//par_iter
+        iter()
+        .map(|e| {
+            let num = factors.iter().filter(|&el| el == e).count();
+            //println!(" {} = {} elements",e,num);
+            if num > 1 {
+                return format!("{}^{}", e, num);
+            }
+            format!("{}", e)
+        })
+        .reduce(|a,b|a +" * "+&b).unwrap()
+        
+    
 }
+
 fn main() {
     let now = Instant::now();
-    //println!("{:?}",Factors::of(( 9 as u64).into()).result);
-    print_factors(big_fact(40000));
+    println!("{:?}",Factors::of(( 100 as u64).into()).result);
+   //big_fact(10000,false);
     // Find Mersenne primes
 
     println!("{:?}", now.elapsed())

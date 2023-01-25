@@ -1,4 +1,4 @@
-#![feature(array_methods)]
+
 use std::str;
 use std::time::Instant;
 

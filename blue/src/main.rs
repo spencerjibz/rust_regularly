@@ -22,7 +22,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
     central.start_scan(ScanFilter::default()).await?;
     // instead of waiting, you can use central.event_receiver() to fetch a channel and
     // be notified of new devices
-    time::sleep(Duration::from_millis(560)).await;
+
+    time::sleep(Duration::from_millis(400)).await;
     let mut devices: Vec<Peripheral> = vec![];
     // find the device we're interested in
 

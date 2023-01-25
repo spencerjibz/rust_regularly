@@ -1,10 +1,15 @@
 import {createRequire} from 'module';
 const require = createRequire(import.meta.url);
- let  {encodeRailFenceCipher,decodeRailFenceCipher,longAddition} =  require('../index.node');
-  import {listSquaredJs as listSquared , longAddition as longAddition2}  from "../jsVers.js";
+ let  {encodeRailFenceCipher,decodeRailFenceCipher,longAddition,toRoman,fromRoman,listSquared,alphametics} =  require('../index.node');
+  import {listSquaredJs , longAddition as longAddition2,RomanNumerals as RomanNumerals2}  from "../jsVers";
+  
+ 
 import assert from 'assert';
-let add = longAddition2;
-describe("Testing rust-node addon", function(){
+let add = longAddition;
+let Roman = {toRoman,fromRoman};
+let RomanNumerals = RomanNumerals2;
+
+describe("encodeRailFenceCipher", function(){
     it("should work with basic tests", function(){
       assert.strictEqual(encodeRailFenceCipher("Hello, World!", 3), "Hoo!el,Wrdl l");
       assert.strictEqual(encodeRailFenceCipher("Hello, World!", 2), "Hlo ol!el,Wrd");
@@ -59,7 +64,7 @@ describe("Testing rust-node addon", function(){
       }
     });
   });
-  describe("Rust listSquared ",function(){
+  describe("listSquared ",function(){
    it(" Basic tests",function() {
     assert.deepEqual(listSquared(1, 250), [[1, 1], [42, 2500], [246, 84100]])
     assert.deepEqual(listSquared(42, 250), [[42, 2500], [246, 84100]])
@@ -159,4 +164,134 @@ describe('long Addition', function() {
               '835743829547328954732895474893754893753281957319857432958432548937859483265893274891378593187431583942678439217431924789');
     assert.strictEqual(sum, '1823172964260263830982280609675150766951754355882242391698277783797094242179652457248777050585906182180138262963360272327');
   });
+});
+describe("Roman Numbers Helper", () => {
+
+		it("sample tests", () => {
+			assert.strictEqual(
+				RomanNumerals.toRoman(1000),
+				"M"
+			);
+			assert.strictEqual(
+				RomanNumerals.toRoman(4),
+				"IV"
+			);
+			assert.strictEqual(RomanNumerals.toRoman(1), "I");
+			assert.strictEqual(
+				RomanNumerals.toRoman(1990),
+				"MCMXC"
+			);
+			assert.strictEqual(
+				RomanNumerals.toRoman(2008),
+				"MMVIII"
+			);
+
+			assert.strictEqual(
+				RomanNumerals.fromRoman("XXI"),
+				21
+			);
+			assert.strictEqual(
+				RomanNumerals.fromRoman("I"),
+				1
+			);
+			assert.strictEqual(
+				RomanNumerals.fromRoman("IV"),
+				4
+			);
+			assert.strictEqual(
+				RomanNumerals.fromRoman("MMVIII"),
+				2008
+			);
+			assert.strictEqual(
+				RomanNumerals.fromRoman("MDCLXVI"),
+				1666
+			);
+		});
+	
+
+	const solution = {
+		Values: [
+			["M", 1000],
+			["CM", 900],
+			["D", 500],
+			["CD", 400],
+			["C", 100],
+			["XC", 90],
+			["L", 50],
+			["XL", 40],
+			["X", 10],
+			["IX", 9],
+			["V", 5],
+			["IV", 4],
+			["I", 1],
+		],
+
+		fromRoman: function (str) {
+			var result = 0;
+			for (var i = 0; i < this.Values.length; ++i) {
+				var pair = this.Values[i];
+				var key = pair[0];
+				var value = pair[1];
+				var regex = RegExp("^" + key);
+				while (str.match(regex)) {
+					result += value;
+					str = str.replace(regex, "");
+				}
+			}
+			return result;
+		},
+
+		toRoman: function (n) {
+			var value = "";
+			for (
+				var i = 0;
+				n > 0 && i < this.Values.length;
+				i++
+			) {
+				while (n >= this.Values[i][1]) {
+					value += this.Values[i][0];
+					n -= this.Values[i][1];
+				}
+			}
+			return value;
+		},
+	};
+
+	function randInt(min, max) {
+		min = Math.ceil(min);
+		max = Math.floor(max);
+		return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive
+	}
+
+	it("random tests", () => {
+		for (let i = 0; i < 100; i++) {
+			const n = randInt(1, 3999);
+			const romanString = solution.toRoman(n);
+			assert.strictEqual(
+				RomanNumerals.toRoman(n),
+				romanString
+			);
+			assert.strictEqual(
+				RomanNumerals.fromRoman(romanString),
+				n
+			);
+		}
+	});
+});
+
+describe("Alphametics", () => {
+	const example_tests = [
+		["SEND + MORE = MONEY", "9567 + 1085 = 10652"],
+		["ZEROES + ONES = BINARY", "698392 + 3192 = 701584"],
+		["COUPLE + COUPLE = QUARTET", "653924 + 653924 = 1307848"],
+		["DO + YOU + FEEL = LUCKY", "57 + 870 + 9441 = 10368"],
+		[
+			"ELEVEN + NINE + FIVE + FIVE = THIRTY",
+			"797275 + 5057 + 4027 + 4027 = 810386",
+		],
+	];
+	example_tests.forEach(([s, user]) =>
+    it(`should return ${user} for ${s}`, () => {
+		expect(alphametics(s)).toEqual(user)  })
+	);
 });

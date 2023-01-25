@@ -3,10 +3,18 @@ use nvml_wrapper::enum_wrappers::device::{Clock, TemperatureSensor};
 use nvml_wrapper::error::NvmlError;
 use nvml_wrapper::{cuda_driver_version_major, cuda_driver_version_minor,enums::device::UsedGpuMemory};
 use pretty_bytes::converter::convert;
-use nvml_wrapper::NVML;
+use nvml_wrapper::Nvml;
 use sysinfo::{ProcessExt, RefreshKind, System, SystemExt,ProcessRefreshKind,Pid};
+use std::time::Instant;
+use  once_cell::sync::Lazy;
+#[allow(non_upper_case_globals)]
+     static nvml:Lazy<Nvml> = Lazy::new(|| {
+        Nvml::init().ok().unwrap()
+     });
 fn main() -> Result<(), NvmlError> {
-    let nvml = NVML::init()?;
+    let now = Instant::now();
+    
+    //let nvml = NVML::init()?;
 
     
 
@@ -29,17 +37,16 @@ fn main() -> Result<(), NvmlError> {
          let process = system.process ( Pid::from(device_process.pid as usize));
       
         
-          
-
+    
           process_info.push(format!("{:?} ",process))
      }
       let util_rates = device.utilization_rates()?.gpu;
      let encoder_util = device.encoder_utilization()?.utilization;
-         println!(" GPU:{name}  Temperature:{temperature} overall utilization: {util_rates} encoder_utilization: {encoder_util}");
+         println!(" GPU:{name}  Temperature:{temperature} overall utilization: {util_rates} encoder_utilization: {encoder_util}%");
          println!("--------------------------Compute Processes ------------------------------");
-         for v in process_info { 
-            
-              println!("{:#?} ",v);
+         for v in  device.running_compute_processes()?{ 
+             let p = system.process(Pid::from(v.pid as usize));
+              println!("{:#?} ",p.unwrap().name());
               //println!("{:?} % ", util_rates)
          }
          println!("----------------------------- GRAPHICS_PROCESSES -------------------------------------");
@@ -47,9 +54,9 @@ fn main() -> Result<(), NvmlError> {
             let process = system.process ( Pid::from(graphics_process.pid as usize));
       
            
-             println!("{:#?}", process)
+             println!("{:#?}", process.unwrap().name());
           }
-      
+      println!("{:?}",now.elapsed());
 
     Ok(())
 }

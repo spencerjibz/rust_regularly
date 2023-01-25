@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 use itertools::Itertools;
 use std::cmp::Ordering;
 
@@ -16,7 +17,7 @@ fn main() {
     */
     //println!("{:?}",);//disemvowel("This website is for losers LOL!"));
     //println!("{}",decomp(22));
-    println!("{:?}",solve(vec![]));
+      println!("{:?}",find_all(65, 17));
     println!("{:?}", now.elapsed())
 }
 
@@ -751,4 +752,66 @@ fn sample_test4() {
     let square = &[vec![1]];
     let expected = vec![1];
     assert_eq!(snail(square), expected);
+}
+
+
+
+// 
+#[inline]
+fn find_all(sum_dig: u8, digs: u8) -> Option<(usize, u64, u64)> {
+   // use std::rc::Rc;
+   use rayon::prelude::*;
+    let max_count = format!("1{}" ,"0".repeat(digs as usize));
+    let max = max_count.parse::<u64>().unwrap();
+    let min_count = format!("1{}" ,"0".repeat((digs-1) as usize));
+    let min = min_count.parse::<u64>().unwrap();
+
+ 
+let  result =  (min..max).into_par_iter().filter(|e| count_of_digits(*e) == digs && increasing_od(*e)&& sum_of_digits(*e) == (sum_dig as u32) ).collect::<Vec<u64>>() ;
+  
+ let length = result.len();
+ let max_n = result.iter().max().unwrap_or(&0);
+ let min_n = result.iter().min().unwrap_or(&0);
+ 
+    if length == 0 {
+        return None;
+    } else {
+        return Some((length, *min_n , *max_n ));
+    }
+
+
+}
+ fn sum_of_digits(num:u64) -> u32 { 
+      num.to_string().chars().map(|c| c.to_digit(10).unwrap()).reduce(|a, b| a + b).unwrap()
+ }
+
+fn count_of_digits(num:u64) -> u8 { 
+    return num.to_string().chars().count() as u8;
+}
+fn increasing_od(num:u64) -> bool {
+ 
+     is_sorted(num.to_string().chars())
+}
+
+fn is_sorted<I>(data: I) -> bool
+where
+    I: IntoIterator,
+    I::Item: Ord,
+{
+    let mut it = data.into_iter();
+    match it.next() {
+        None => true,
+        Some(first) => it.scan(first, |state, next| {
+            let cmp = *state <= next;
+            *state = next;
+            Some(cmp)
+        }).all(|b| b),
+    }
+}
+#[test]
+fn sample_tests() {
+    assert_eq!(find_all(10, 3), Some((8, 118, 334)));
+    assert_eq!(find_all(27, 3), Some((1, 999, 999)));
+    assert_eq!(find_all(84, 4), None);
+    assert_eq!(find_all(35, 6), Some((123, 116999, 566666)));
 }

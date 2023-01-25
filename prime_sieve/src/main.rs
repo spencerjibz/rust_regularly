@@ -1,8 +1,7 @@
-#[allow(non_snake_case)]
 use std::cell::RefCell;
-#[allow(non_snake_case)]
+
 use std::iter::{empty, once};
-#[allow(non_snake_case)]
+
 use std::rc::Rc;
 use std::time::Instant;
 
@@ -196,7 +195,7 @@ fn count_primes_paged(top: u64) -> i64 {
 
 fn main() {
     #[allow(unused_variables)]
-    let n = 262146;
+    let n = 262146909;
     let vrslt = primes_paged().take_while(|&p| p <= 100).collect::<Vec<_>>();
     println!("{:?}", vrslt);
 
@@ -210,7 +209,7 @@ fn main() {
     println!("{}", count);
 
     let secs = elpsd.as_secs();
-    let millis = (elpsd.subsec_nanos() / 1000000) as u64;
+    let millis = (elpsd.subsec_millis() / 1000000) as u64;
     let dur = secs * 1000 + millis;
     println!("Culling composites took {} milliseconds.", dur);
 }
