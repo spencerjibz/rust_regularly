@@ -7,5 +7,5 @@
 
 /*/node_modules/
 # Added by cargo
-
+node_addon/wasi_func/target
 /target
