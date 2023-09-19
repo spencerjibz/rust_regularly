@@ -1,4 +1,4 @@
-## RUST_REGULARLY
+## RUST_ADVENTURES
 The repo features  usage and learning in rust including: 
 - Solutions to Katas from coderwars
 - Translations from other languages to rust(mainly Javascript)
